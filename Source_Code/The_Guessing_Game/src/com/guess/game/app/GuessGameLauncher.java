@@ -36,7 +36,7 @@ public class GuessGameLauncher {
 			for(currPlayer = startWith; currPlayer < playerCount; currPlayer++)
 			{
 //				System.out.println(currPlayer + " " + skipFlag);
-				
+				if(game.isAllCellSelected()) break;
 				System.out.print(String.format(" %-25s : ",game.Players[currPlayer].getName()));
 				
 					int guess = Integer.parseInt(input.readLine());
