@@ -1,0 +1,22 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>C:\Users\Devanand\Desktop\BattleShip [DotCom Edition].jar</jar>
+  <outfile>C:\Users\Devanand\Desktop\The Guessing Game [Battleship Edition].exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>C:\Users\Devanand\Edge\icons\favicon.ico</icon>
+  <jre>
+    <path></path>
+    <minVersion>1.7.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+  </jre>
+</launch4jConfig>

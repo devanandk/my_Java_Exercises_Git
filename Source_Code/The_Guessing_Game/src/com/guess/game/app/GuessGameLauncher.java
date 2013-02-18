@@ -26,7 +26,7 @@ public class GuessGameLauncher {
 		
 		initializeGame();
 		
-		while(gameNotEnded()){
+		while(isGameNotOver()){
 			try {
 			game.printBoard(boardSize);
 			System.out.println("\nEnter your guesses \n" +
@@ -72,7 +72,7 @@ public class GuessGameLauncher {
 		
 	}
 
-	private static boolean gameNotEnded() {
+	private static boolean isGameNotOver() {
 
 		if(game.isAllGuessesOver())
 		{

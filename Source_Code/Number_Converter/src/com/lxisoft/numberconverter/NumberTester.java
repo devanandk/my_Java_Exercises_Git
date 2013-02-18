@@ -11,7 +11,7 @@ public class NumberTester {
 
 		NumberConverter converter = new NumberConverter();
 		converter.readNumber();
-		converter.generateString();
+		converter.generateNumberString();
 		try {
 			converter.printString();
 		} catch (IOException e) {
