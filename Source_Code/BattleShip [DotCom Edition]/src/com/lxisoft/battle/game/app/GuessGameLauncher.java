@@ -67,7 +67,7 @@ public class GuessGameLauncher {
 			GameEngine.waitAndExit();
 		}
 		}
-		
+		game.printBoard(boardSize);
 		game.showScores();
 		GameEngine.waitAndExit();
 	}

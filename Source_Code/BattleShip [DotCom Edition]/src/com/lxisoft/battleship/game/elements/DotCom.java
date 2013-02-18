@@ -6,6 +6,7 @@ public class DotCom {
 	private boolean selected;
 	private String dotComId;
 	
+	
 	public DotCom(String newName)
 	{
 		name = newName;

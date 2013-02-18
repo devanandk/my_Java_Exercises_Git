@@ -108,11 +108,11 @@ public class GameEngine {
 								
 				if(Board[row][col].isSelected())
 					if(Board[row][col].getDotComId().length() > 0){
-						System.out.print(String.format("%-5s", "@"));
+						System.out.print(String.format("%-5s", "H"));
 					}
 					else
 					{
-						System.out.print(String.format("%-5s", "X"));
+						System.out.print(String.format("%-5s", " "));
 					}
 				else
 				{
