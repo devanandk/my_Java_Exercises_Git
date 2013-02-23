@@ -9,8 +9,8 @@ import com.lxisoft.battleship.game.elements.Player;
 
 public class GameEngine {
 	
-	private static final int KILL_SCORE = 6;
-	private static final int HIT_SCORE = 1;
+	public static final int KILL_SCORE = 6;
+	public static final int HIT_SCORE = 1;
 	DotCom[][] Board;
 	Player[] Players;
 	int sizeOfBoard;
@@ -272,7 +272,7 @@ public class GameEngine {
 		int winningScore = 0;
 		int thisPlayer = 0;
 		
-		System.out.println("\n\nTHE Dot.Com GUESSING GAME");
+		System.out.println("\n\nTHE Dot.Com GUESSING GAME [BATTLESHIP EDITION]");
 		
 		winningScore = Players[0].getScore();
 		//-- this for loop checks for the winning score
