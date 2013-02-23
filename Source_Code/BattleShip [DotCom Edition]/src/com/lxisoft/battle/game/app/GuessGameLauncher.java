@@ -4,6 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Main class of the Guessing Game [Battleship Edition]<br>
+ * The main game loop is executed by this class. The GameLauncher class acts as the 
+ * entry point for the game during execution.
+ * 
+ * @author Devanand
+ * @version 1.1
+ */
 public class GuessGameLauncher {
 
 	static GameEngine game;
@@ -20,6 +28,16 @@ public class GuessGameLauncher {
 
 	}
 	
+	/**
+	 * Contains the main game execution loop<br>
+	 * <br>
+	 * Calls the {@link #initializeGame()} method to setup the initial parameters
+	 * for game execution. Then runs the game and reads player input and updates the board state, player scores and other
+	 * game state variables. Execution will loop until the game exit conditions as defined by the {@link #isGameNotOver()} method
+	 * are set. Upon completion of the game, it also calls the {@link GameEngine#showScores()} to display the scores before exiting.
+	 * 
+	 * @throws IOException
+	 */
 	public static void runGame() throws IOException{
 		
 		String guess = "";
@@ -82,6 +100,14 @@ public class GuessGameLauncher {
 		GameEngine.waitAndExit();
 	}
 
+	/**
+	 * Evaluates the game exit conditions<br>
+	 * <br>
+	 * Uses the {@link GameEngine#isAllCellSelected()} method and {@link GameEngine#isAllGuessesOver()} method to check if
+	 * the game exit conditions have been satisfied.
+	 * 
+	 * @return	boolean true if game is not over, else false
+	 */
 	private static boolean isGameNotOver() {
 
 		if(game.isAllGuessesOver())
@@ -98,11 +124,25 @@ public class GuessGameLauncher {
 		}
 	}
 
+	/**
+	 * Setup initial game parameters<br>
+	 * <br>
+	 * This method displays the initial instructions to the players, reads and verifies the size specified for the game board 
+	 * and the number of players. It also allows the players to set custom names for themselves (using the {@link GameEngine#setCustomPlayerNames()} method). 
+	 * It also creates a new GameEngine object, initializes it and generates a new board (using the {@link GameEngine#fillBoard(int)} method).
+	 * <p>
+	 * The method also specifies the sizes allowed for the board and also checks the minimum and maximum number of players allowed for each board 
+	 * size. The method will throw exception if any of the conditions is not satisfied by the user input.
+	 * 
+	 * @see GameEngine#setCustomPlayerNames()
+	 * @see GameEngine#fillBoard(int)
+	 * 
+	 */
 	private static void initializeGame() {
 		
 		System.out.println("\n\nTHE Dot.Com GUESSING GAME [Battleship Edition]");
 		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println("Hello Agent X.... \nOur selection of targets for you today are " +
+		System.out.println("Hello Agents.... \nOur selection of targets for you today are " +
 				"\"Dot.Com ships\" hidden randomly on the board. Your mission, should you choose to accept it, is to " +
 				"locate the hidden ships that pose a threat to the very existance of the free web as we know it " +
 				"and in the process put an end to their evil reign of terror. This game will begin now.... " +
@@ -114,9 +154,9 @@ public class GuessGameLauncher {
 			String instructionsFlag = input.readLine();
 			
 			if(instructionsFlag.toUpperCase().equals("Y")){
-				System.out.println("\n MISSION INTEL");
+				System.out.println("\n\n MISSION INTEL");
 				System.out.println("--------------------------------------------------------------------------------\n");
-				System.out.println(" 1. You are allowed to choose between three board sizes - Small, Medium and Large\n");
+				System.out.println(" 1. You are allowed to choose between three board sizes: Small, Medium and Large\n");
 				System.out.println(" 2. Number of players must be mentioned as 1 or above, with variations in maximum" +
 						" number of players allowed depending of the size of the board.\n");
 				System.out.println(" 3. Each player takes turns guessing the location of the ships on the board.\n");
