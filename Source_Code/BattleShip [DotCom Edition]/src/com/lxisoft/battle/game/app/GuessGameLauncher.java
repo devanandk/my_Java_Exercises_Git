@@ -17,7 +17,6 @@ public class GuessGameLauncher {
 
 		input = new BufferedReader(new InputStreamReader(System.in));
 		runGame();
-		
 
 	}
 	
@@ -27,23 +26,29 @@ public class GuessGameLauncher {
 		
 		while(isGameNotOver()){
 			try {
-			game.printBoard(boardSize);
-			System.out.println("\nEnter your guesses \n" +
-					"------------------------------------------");
+			
 			if(startWith >= playerCount)
 				startWith = 0;
 			for(currPlayer = startWith; currPlayer < playerCount; currPlayer++)
 			{
-//				System.out.println(currPlayer + " " + skipFlag);
 				if(game.isAllCellSelected()) break;
+				
+				if(game.isAllGuessesOver()) break;
+				
+				game.printBoard(boardSize);
+				
+				System.out.println("\n Enter your guesses \n" +
+						"------------------------------------------");
 				System.out.print(String.format(" %-25s : ",game.Players[currPlayer].getName()));
 				
-					String guess = input.readLine();
-					game.readPlayerInput(currPlayer, guess);
+				String guess = input.readLine();
+				
+				if(game.readPlayerInput(currPlayer, guess)){
+					currPlayer--;
+				}
 			}
 			System.out.println();
 			startWith = 0;
-			game.updateScore();
 		}
 			catch(ArrayIndexOutOfBoundsException e)
 			{
@@ -90,11 +95,13 @@ public class GuessGameLauncher {
 
 	private static void initializeGame() {
 		
-		System.out.println("\n\nTHE Dot.Com GUESSING GAME");
+		System.out.println("\n\nTHE Dot.Com GUESSING GAME [Battleship Edition]");
 		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println("This is a simple guessing game. There are a few web addresses hidden randomly inside " +
-				"the board. The players will each take turns to guess where they are hidden. The player " +
-				"who guesses the most options correctly will win the game.\n");
+		System.out.println("Hello Agent X.... \nOur selection of targets for you today are " +
+				"\"Dot.Com ships\" hidden randomly on the board. Your mission, should you wish to choose it, is to " +
+				"locate the hidden ships that pose a threat to the very existance of the free web as we know it " +
+				"and in the process put an end to their evil reign of terror. This game will begin now.... " +
+				"\n\nGood luck Agents....!!!\n");
 		
 		try {
 			System.out.print("\nEnter the board size [S / M / L] : ");

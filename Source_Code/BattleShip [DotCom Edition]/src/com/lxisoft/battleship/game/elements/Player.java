@@ -5,13 +5,11 @@ public class Player {
 	private String name;
 	private int score;
 	private String currentGuess;
-	private boolean killStreak;
 	
 	public Player(String playerName){
 		name = playerName;
 		score = 0;
 		currentGuess = "";
-		killStreak = false;
 	}
 	
 	public void setGuess(String guess)
@@ -29,9 +27,9 @@ public class Player {
 		return name;
 	}
 	
-	public void addScore()
+	public void addScore(int incrementValue)
 	{
-		score++;
+		score = score + incrementValue;
 	}
 
 	public int getScore()
@@ -43,17 +41,4 @@ public class Player {
 	{
 		name = playerName;
 	}
-	
-	public boolean isKillStreak(){
-		return killStreak;
-	}
-	
-	public void setKillStreak(){
-		killStreak = true;
-	}
-	
-	public void resetKillStreak(){
-		killStreak = false;
-	}
-	
 }

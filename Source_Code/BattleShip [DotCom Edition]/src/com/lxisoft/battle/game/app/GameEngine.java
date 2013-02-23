@@ -9,11 +9,14 @@ import com.lxisoft.battleship.game.elements.Player;
 
 public class GameEngine {
 	
+	private static final int KILL_SCORE = 6;
+	private static final int HIT_SCORE = 1;
 	DotCom[][] Board;
 	Player[] Players;
 	int sizeOfBoard;
 	int noOfPlayers;
 	BufferedReader input;
+	int currentPlayer;
 	
 	String[] boardElements = {"Gmail.com", "Hotmail.com", "Yahoo.com", "Rediffmail.com", 
 							"Engadget.com", "in.com", "flipkart.com", "Alagesia.org", "piratebay.org",
@@ -26,10 +29,10 @@ public class GameEngine {
 	{
 		sizeOfBoard = boardSize;
 		noOfPlayers = playerCount;
+		currentPlayer = 0;
 		Board = new DotCom[sizeOfBoard][sizeOfBoard];
 		Players = new Player[playerCount];
 		input = new BufferedReader(new InputStreamReader(System.in));
-		
 		int thisPlayer;		
 		for(thisPlayer = 0; thisPlayer < playerCount; thisPlayer++)
 		{
@@ -50,25 +53,68 @@ public class GameEngine {
 		int currentRow;
 		int currentCol;
 		String currentObject;
-		String currentId;
 		int currentDirection;
 		
 		for(int i = 0; i < numOfHiddenObjects; i++){
 			
-			currentRow = (int) (Math.random() * sizeOfBoard);
-			currentCol = (int) (Math.random() * sizeOfBoard);
+			currentRow = (int) (Math.random() * sizeOfBoard-1);
+			currentCol = (int) (Math.random() * sizeOfBoard-1);
+			if(currentRow < 1) currentRow = 1;
+			if(currentCol < 1) currentCol = 1;
 			
 			currentObject = boardElements[(int) (Math.random() * (boardElements.length))];
-			currentDirection = (int) (Math.random() * 2);
+			currentDirection = (int) (Math.random() * 10);
 			
-			currentId = String.format("%s.%s.%s.%s", currentRow, currentCol, currentObject, currentDirection);
+//			System.out.println(currentRow + "  " + currentCol + "  " + currentObject + "  " + currentDirection);
 			
-//			System.out.println(currentId);
-			
-			Board[currentRow][currentCol].setName(currentObject);
-			Board[currentRow][currentCol].setDotComId(currentId);
+			if(placeShip(currentRow, currentCol, currentObject, currentDirection)){
+//				System.out.println("new ship placed at " + currentRow + "  " + currentCol + 
+//						" Direction : " + currentDirection);
+			}
+//			else
+//			{
+//				System.out.println("ship at " + currentRow + " " + currentCol + " overlaps existing ship.");
+//			}
 		}
 		
+	}
+
+	private boolean placeShip(int currentRow, int currentCol,
+			String currentObject, int currentDirection) {
+		
+		String currentId;
+		
+		currentId = String.format("%s.%s.%s.%s", currentRow, currentCol, currentObject, currentDirection);
+		
+		if((currentDirection % 2) == 0){
+			for(int thisRow = currentRow -1; thisRow <= currentRow + 1; thisRow++){
+				if(Board[thisRow][currentCol].getDotComId().length() > 0){
+					return false;
+				}
+			}
+			for(int thisRow = currentRow -1; thisRow <= currentRow + 1; thisRow++){
+				Board[thisRow][currentCol].setName(currentObject);
+				Board[thisRow][currentCol].setDotComId(currentId);
+				Board[thisRow][currentCol].setDirection(currentDirection);
+			}
+			
+		}
+		else{
+			
+			for(int thisCol = currentCol -1; thisCol <= currentCol + 1; thisCol++){
+				if(Board[currentRow][thisCol].getDotComId().length() > 0){
+					return false;
+				}
+			}
+			for(int thisCol = currentCol -1; thisCol <= currentCol + 1; thisCol++){
+				Board[currentRow][thisCol].setName(currentObject);
+				Board[currentRow][thisCol].setDotComId(currentId);
+				Board[currentRow][thisCol].setDirection(currentDirection);
+			}
+			
+		}
+		System.out.println(" current ship id is " + currentId);
+		return true;
 	}
 
 	public boolean isAllCellSelected()
@@ -134,46 +180,92 @@ public class GameEngine {
 		System.out.println("\n");
 	}
 	
-	public void readPlayerInput(int playerNo, String guess)
+	public boolean readPlayerInput(int playerNo, String guess)
 	{
 		Players[playerNo].setGuess(guess);
-//		System.out.println(Players[playerNo].getName() + " guessed " + guess);
+		currentPlayer = playerNo;
+		return this.updateScore();
 	}
 	
-	public void updateScore()
+	public boolean updateScore()
 	{
 		String guess;
+		boolean hitFlag = false;
 		
-		for(int thisPlayer = 0; thisPlayer < noOfPlayers; thisPlayer++){
-			guess = Players[thisPlayer].getGuess();
+		guess = Players[currentPlayer].getGuess();
 			
-			if(this.getGuessRow(guess) < 0 || this.getGuessRow(guess) >= sizeOfBoard
+		if(this.getGuessRow(guess) < 0 || this.getGuessRow(guess) >= sizeOfBoard
 					|| this.getGuessCol(guess) < 0 || this.getGuessRow(guess) >= sizeOfBoard){
 				throw new ArrayIndexOutOfBoundsException();
+		}
+
+		int row, col;
+
+		row = this.getGuessRow(guess);
+		col = this.getGuessCol(guess);
+			
+	
+		if(!(Board[row][col].getName().length()==0)){
+				if(!Board[row][col].isSelected())
+				{
+					Board[row][col].setUserName(Players[currentPlayer].getName());
+					Board[row][col].setSelected();
+					
+					if(isKillStreak(row, col)){
+						Players[currentPlayer].addScore(KILL_SCORE);
+						System.out.println("\n " + Players[currentPlayer].getName() + " has sunk "+ Board[row][col].getName());	
+					}
+					else{
+					Players[currentPlayer].addScore(HIT_SCORE);
+					System.out.println("\n " + Players[currentPlayer].getName() + " has scored.");
+					}
+					hitFlag = true;
+				}
+		}
+		Board[row][col].setSelected();
+		return hitFlag;
+	}
+			
+	private boolean isKillStreak(int row, int col) {
+		
+		int killCount = 0;
+		
+		String shipId = Board[row][col].getDotComId();
+		
+		if((Board[row][col].getDirection() % 2) == 0)
+		{																						//-- for the current row
+			for(int thisRow = 0; thisRow < sizeOfBoard; thisRow++)
+			{																					//-- check each cell such that
+				if(Board[thisRow][col].getDotComId().length() > 0 && Board[thisRow][col].isSelected())
+				{																				//-- if the dotComId has been set then,
+					if(Board[thisRow][col].getDotComId().equals(shipId))
+					{																			//-- check if the dotComId is equal to the current shipId for each cell and that all those cells have been hit
+						if(Board[thisRow][col].getUserName().equals(Players[currentPlayer].getName()))
+																								//-- if all hits were not made by the same user then
+							killCount++;
+					}
+				}
 			}
 		}
-		
-		for(int thisPlayer = 0; thisPlayer < noOfPlayers; thisPlayer++){
-			
-			guess = Players[thisPlayer].getGuess();
-			
-//			System.out.println(guess + " " +Board[guess].getName());
-			int row, col;
-			row = this.getGuessRow(guess);
-			col = this.getGuessCol(guess);
-			
-					if(!(Board[row][col].getName().length()==0)){
-						if(!Board[row][col].isSelected())
-						{
-							Players[thisPlayer].addScore();
-							System.out.println(Players[thisPlayer].getName() + " has scored.");
-						}
+		else{																					//-- for the current column
+			for(int thisCol = 0; thisCol < sizeOfBoard; thisCol++)
+			{																					//-- check each cell such that
+				if(Board[row][thisCol].getDotComId().length() > 0 && Board[row][thisCol].isSelected())
+				{																				//-- if the dotComId has been set then,
+					if(Board[row][thisCol].getDotComId().equals(shipId))
+					{																			//-- check if the dotComId is equal to the current shipId for each cell and that all those cells have been hit
+						if(Board[row][thisCol].getUserName().equals(Players[currentPlayer].getName()))
+																								//-- if all hits were not made by the same user then
+							killCount++;
 					}
-					Board[row][col].setSelected();
-					}
-					
 				}
+			}
 			
+			}
+		if(killCount == 3) return true;
+		else return false;
+	}
+
 	public void showScores() {
 		
 		int winner = 0;
