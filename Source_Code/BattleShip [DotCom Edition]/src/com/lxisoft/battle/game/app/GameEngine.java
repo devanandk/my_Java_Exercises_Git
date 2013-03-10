@@ -21,11 +21,12 @@ public class GameEngine {
 	public static final int KILL_SCORE = 6;
 	public static final int HIT_SCORE = 1;
 	
-	
 	DotCom[][] Board;
 	Player[] Players;
+	
 	int sizeOfBoard;
 	int noOfPlayers;
+	
 	BufferedReader input;
 	int currentPlayer;
 	
@@ -116,7 +117,6 @@ public class GameEngine {
 		
 	}
 
-	
 	/**
 	 * Places a ship on the specified co-ordinates if it satisfied a fixed set of conditions<br>
 	 * <br>
@@ -170,7 +170,6 @@ public class GameEngine {
 		return true;
 	}
 
-	
 	/**
 	 * Checks if all cells on the board have already been selected by the players<br>
 	 * <br>
@@ -220,7 +219,7 @@ public class GameEngine {
 	 * <li> Index positions at the boundary using numbers in the X axis and Letters from {@link #boardPositions} array on the Y axis
 	 * <li> Unselected board elements identified by the "~" symbol
 	 * <li> Hits by the players are identified by "H" symbol
-	 * <li> Miss by the players are identfied by an empty space at the guess location.
+	 * <li> Miss by the players are identified by an empty space at the guess location.
 	 * 
 	 * @param boardSize	int : size of the board to be displayed screen
 	 */
